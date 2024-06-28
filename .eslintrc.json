@@ -16,7 +16,8 @@
         "group": "newLine",
         "printWidth": 100
       }
-    ]
+    ],
+    "readable-tailwind/sort-classes": "off"
   },
   "overrides": [
     {
