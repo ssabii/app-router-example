@@ -1,6 +1,12 @@
 {
-  // enable ESLint to fix tailwind classes on save
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "class:list",
+    ".*Styles*"
+  ]
 }
