@@ -4,7 +4,8 @@
     "next/core-web-vitals",
     "plugin:tailwindcss/recommended",
     "plugin:readable-tailwind/warning",
-    "plugin:readable-tailwind/error"
+    "plugin:readable-tailwind/error",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "plugins": [
     "readable-tailwind"
