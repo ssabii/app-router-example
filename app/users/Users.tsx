@@ -11,13 +11,16 @@ export default function Users() {
 
   return (
     <div className="flex flex-col gap-2 p-4">
-      {data?.map(({ id, name, username, email }) => (
-        <div key={id} className="rounded-lg p-4 shadow-lg">
-          <div className="text-lg">
+      {data?.map(({ id, name, username, email, phone }) => (
+        <div key={id} className="flex flex-col gap-1 rounded-2xl p-4 shadow-md">
+          <div className="text-lg text-slate-900">
             {`${name} ${username}`}
           </div>
           <div className="text-base text-slate-600">
             {email}
+          </div>
+          <div className="text-sm text-slate-400">
+            {phone}
           </div>
         </div>
       ))}
