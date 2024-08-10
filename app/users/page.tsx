@@ -1,5 +1,6 @@
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query"
 import { getUsers } from "@/apis/users"
+import { Suspense } from "react"
 import Users from "./Users"
 
 export default async function UsersPage() {
