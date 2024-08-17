@@ -5,6 +5,9 @@ import { Suspense } from "react";
 export default function NoParallelRoutePage() {
   return (
     <div className="flex flex-col gap-4">
+      <Suspense fallback={<DashboardLoading />}>
+        <Dashboard />
+      </Suspense>
       <Suspense fallback={<UsersLoading />}>
         <Users />
       </Suspense>
@@ -15,7 +18,23 @@ export default function NoParallelRoutePage() {
   );
 }
 
-const usersStyles = 'rounded-lg bg-pink-300 p-4 text-2xl text-gray-900 shadow-md';
+const dashboardStyles = 'rounded-lg bg-pink-300 p-4 text-2xl text-gray-900 shadow-md';
+
+async function Dashboard() {
+  await wait(1000);
+  return <h2 className={dashboardStyles}>
+    Dashboard
+  </h2>
+}
+
+function DashboardLoading() {
+  return <div className={dashboardStyles}>
+    <Spinner className="mr-3 inline-block size-7 animate-spin" />
+    Loading Dashboard...
+  </div>
+}
+
+const usersStyles = 'rounded-lg bg-emerald-300 p-4 text-2xl text-gray-900 shadow-md';
 
 async function Users() {
   await wait(3000);
