@@ -2,15 +2,20 @@
   "root": true,
   "extends": [
     "next/core-web-vitals",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:tailwindcss/recommended",
     "plugin:readable-tailwind/warning",
     "plugin:readable-tailwind/error",
     "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "plugins": [
+    "react",
+    "react-hooks",
     "readable-tailwind"
   ],
   "rules": {
+    "react/react-in-jsx-scope": "off",
     "readable-tailwind/multiline": [
       "warn",
       {
