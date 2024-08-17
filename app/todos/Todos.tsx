@@ -7,11 +7,13 @@ async function Todos() {
     return <div>There was no todos</div>;
   }
 
-  return <ul>
-    {todos.map((todo) => (
-      <li key={todo.id}>{todo.title}</li>
-    ))}
-  </ul>;
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>{todo.title}</li>
+      ))}
+    </ul>
+  );
 }
 
 export default Todos;
