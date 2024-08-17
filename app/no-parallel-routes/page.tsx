@@ -2,78 +2,12 @@ import Spinner from "@/components/icons/Spinner";
 import { wait } from "@/lib/wait";
 import { Suspense } from "react";
 
-export default function NoParallelRoutePage() {
-  return (
-    <div className="flex flex-col gap-4">
-      <Suspense fallback={<DashboardLoading />}>
-        <Dashboard />
-      </Suspense>
-      <Suspense fallback={<UsersLoading />}>
-        <Users />
-      </Suspense>
-      <Suspense fallback={<ArticlesLoading />}>
-        <Articles />
-      </Suspense>
-    </div>
-  );
-}
-
-const dashboardStyles = 'rounded-lg bg-pink-300 p-4 text-2xl text-gray-900 shadow-md';
-
-async function Dashboard() {
+export default async function NoParallelRoutePage() {
   await wait(1000);
+
   return (
-    <h2 className={dashboardStyles}>
+    <h2 className="rounded-lg bg-pink-300 p-4 text-2xl text-gray-900 shadow-md">
       Dashboard
     </h2>
-  )
-}
-
-function DashboardLoading() {
-  return (
-    <div className={dashboardStyles}>
-      <Spinner className="mr-3 inline-block size-7 animate-spin" />
-      Loading Dashboard...
-    </div>
-  )
-}
-
-const usersStyles = 'rounded-lg bg-emerald-300 p-4 text-2xl text-gray-900 shadow-md';
-
-async function Users() {
-  await wait(3000);
-  return (
-    <h2 className={usersStyles}>
-      Users
-    </h2>
-  )
-}
-
-function UsersLoading() {
-  return (
-    <div className={usersStyles}>
-      <Spinner className="mr-3 inline-block size-7 animate-spin" />
-      Loading Users...
-    </div>
-  )
-}
-
-const articlesStyles = 'rounded-lg bg-sky-300 p-4 text-2xl text-gray-900 shadow-md';
-
-async function Articles() {
-  await wait(5000);
-  return (
-    <h2 className={articlesStyles}>
-      Articles
-    </h2>
-  )
-}
-
-function ArticlesLoading() {
-  return (
-    <div className={articlesStyles}>
-      <Spinner className="mr-3 inline-block size-7 animate-spin" />
-      Loading Articles...
-    </div>
-  )
+  );
 }
