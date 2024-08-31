@@ -29,9 +29,16 @@
       }
     ],
     "react/jsx-max-props-per-line": [
-      "error",
+      "warn",
       {
         "maximum": 1
+      }
+    ],
+    "react/jsx-closing-bracket-location": [
+      "warn",
+      {
+        "selfClosing": "line-aligned",
+        "nonEmpty": "line-aligned"
       }
     ],
     "readable-tailwind/multiline": [
