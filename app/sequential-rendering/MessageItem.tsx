@@ -1,30 +1,38 @@
 'use client';
 
-import { PropsWithChildren, ReactNode, useEffect } from "react";
+import MessageTextItem from "./MessageTextItem";
+import { Message } from "./MessageList";
+import MessageChipItem from "./MessageChipItem";
 
 interface MessageItemProps {
-  onRenderComplete: () => void;
+  message: Message
+  onRenderComplete?: () => void;
 }
 
 function MessageItem({
+  message,
   onRenderComplete,
-  children
-}: PropsWithChildren<MessageItemProps>) {
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onRenderComplete();
-    }, 1000);
+}: MessageItemProps) {
+  if (message.type === 'text') {
+    return (
+      <MessageTextItem
+        text={message.message}
+        onRenderComplete={onRenderComplete}
+      />
+    );
+  }
 
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, [onRenderComplete])
+  if (message.type === 'chip') {
+    return (
+      <MessageChipItem
+        text={message.message}
+        chips={message.chips ?? []}
+        onRenderComplete={onRenderComplete}
+      />
+    );
+  }
 
-  return (
-    <div>
-      {children}
-    </div>
-  );
+  return null;
 }
 
 export default MessageItem;
