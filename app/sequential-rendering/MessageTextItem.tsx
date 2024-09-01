@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-
 interface MessageTextItemProps {
   text: string;
   speed?: number;
@@ -32,7 +31,14 @@ function MessageTextItem({
     return () => clearInterval(timer);
   }, [text, speed, onRenderComplete]);
 
-  return <span>{displayedText}</span>;
+  return (
+    <div className={`
+      flex w-full max-w-[320px] rounded-e-xl rounded-es-xl border-gray-200 bg-gray-100 p-4
+    `}
+    >
+      {displayedText}
+    </div>
+  );
 }
 
 export default MessageTextItem;

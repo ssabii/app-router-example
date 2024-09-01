@@ -22,16 +22,19 @@ function MessageList() {
     },
     {
       type: 'text',
-      message: '좋은 선택이에요 추천 메뉴를 보여드릴게요.',
+      message: '좋은 선택이에요! 맛있는 식사 하세요.',                                                                                                                                                                          
     }
   ];
 
   const handleRenderComplete = useCallback(() => {
-    setCurrentIndex((prev) => prev + 1);
+    const timer = setTimeout(() => {
+      setCurrentIndex((prev) => prev + 1);
+      clearTimeout(timer);
+    }, 500);
   }, [setCurrentIndex])
 
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       {messages.map((message, index) => (
         <Fragment key={index}>
           {(index <= currentIndex) && (
