@@ -1,3 +1,4 @@
+import RightArrow from "@/components/icons/RightArrow";
 import Link from "next/link";
 
 function NavLinks() {
@@ -9,7 +10,18 @@ function NavLinks() {
             href="/dashboard"
             className='hover:text-gray-700'
           >
-            dashboard
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <RightArrow className="fill-gray-500" />
+        </li>
+        <li>
+          <Link
+            href="/dashboard/settings"
+            className='hover:text-gray-700'
+          >
+            Settings
           </Link>
         </li>
       </ol>
