@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import NavLinks from "@/components/NavLinks";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,24 +12,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  team,
-  analytics,
+  auth,
 }: Readonly<{
   children: React.ReactNode;
-  team: React.ReactNode
-  analytics: React.ReactNode
+  auth: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavLinks />
-        <div className="p-4">
-          {children}
-        </div>
-        <div className="grid grid-cols-2 gap-4 p-4">
-          {team}
-          {analytics}
-        </div>
+        <nav>
+          <Link href="/login">Open modal</Link>
+        </nav>
+        {auth}
+        {children}
+        <div id="modal-root" />
       </body>
     </html >
   );
