@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import NavLinks from "@/components/NavLinks";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,18 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Link
-          href="/settings"
-          className={`
-            text-lg font-bold text-gray-500
-            hover:text-gray-700
-          `}
-        >
-          Settings
-        </Link>
-        {children}
-        {team}
-        {analytics}
+        <NavLinks />
+        <div className="p-4">
+          {children}
+        </div>
+        <div className="grid grid-cols-2 gap-4 p-4">
+          {team}
+          {analytics}
+        </div>
       </body>
     </html >
   );
