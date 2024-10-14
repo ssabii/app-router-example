@@ -1,5 +1,8 @@
 export default function Page() {
   return (
-    <div>account</div>
+    <div>
+      <div></div>
+      account
+    </div>
   );
 }
