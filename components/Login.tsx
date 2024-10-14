@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Button from './Button';
 import Input from './Input';
 
@@ -8,6 +9,7 @@ function Login() {
       <Input type="email" />
       <Input type="password" />
       <Button>로그인</Button>
+      <Link href="/">홈으로</Link>
     </div>
   );
 }
