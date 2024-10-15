@@ -22,7 +22,7 @@ function Modal({ children }: { children: React.ReactNode }) {
     <div className={`absolute inset-0 z-[1000] flex items-center justify-center bg-black/70`}>
       <dialog ref={dialogRef}
         className={`
-          relative flex h-auto max-h-[500px] w-4/5 max-w-[500px] items-center justify-center
+          relative flex h-auto max-h-[400px] w-4/5 max-w-[400px] items-center justify-center
           rounded-[12px] border-none bg-white p-5 text-4xl font-medium
         `}
         onClose={onDismiss}
