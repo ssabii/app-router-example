@@ -20,8 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <nav>
-          <Link href="/login">Open modal</Link>
+        <nav className="p-4">
+          <Link
+            href="/login"
+            className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
+          >
+            Open modal
+          </Link>
         </nav>
         {auth}
         {children}
