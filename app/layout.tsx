@@ -12,19 +12,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  auth,
+  team,
+  analytics,
 }: Readonly<{
   children: React.ReactNode;
-  auth: React.ReactNode;
+  team: React.ReactNode;
+  analytics: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <nav>
-          <Link href="/login">Open modal</Link>
-        </nav>
-        {auth}
         {children}
+        <div className="grid grid-cols-2 gap-4 p-4">
+          {team}
+          {analytics}
+        </div>
         <div id="modal-root" />
       </body>
     </html >
