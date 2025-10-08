@@ -47,16 +47,8 @@ export interface ImageUploadNodeOptions {
    * @default {}
    * @example { class: 'foo' }
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  HTMLAttributes: Record<string, any>
-}
 
-declare module "@tiptap/react" {
-  interface Commands<ReturnType> {
-    imageUpload: {
-      setImageUploadNode: (options?: ImageUploadNodeOptions) => ReturnType
-    }
-  }
+  HTMLAttributes: Record<string, any>
 }
 
 /**

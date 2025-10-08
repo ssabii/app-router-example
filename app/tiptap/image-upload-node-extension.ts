@@ -10,25 +10,9 @@ export type UploadFunction = (
 
 export interface ImageUploadNodeOptions {
   /**
-   * The type of the node.
-   * @default 'image'
+   * File to upload
    */
-  type?: string | NodeType | undefined
-  /**
-   * Acceptable file types for upload.
-   * @default 'image/*'
-   */
-  accept?: string
-  /**
-   * Maximum number of files that can be uploaded.
-   * @default 1
-   */
-  limit?: number
-  /**
-   * Maximum file size in bytes (0 for unlimited).
-   * @default 0
-   */
-  maxSize?: number
+  file?: File
   /**
    * Function to handle the upload process.
    */
@@ -49,6 +33,14 @@ export interface ImageUploadNodeOptions {
   HTMLAttributes: Record<string, any>
 }
 
+declare module "@tiptap/react" {
+  interface Commands<ReturnType> {
+    imageUpload: {
+      setImageUploadNode: (options?: ImageUploadNodeOptions) => ReturnType
+    }
+  }
+}
+
 /**
  * A Tiptap node extension that creates an image upload component.
  * @see registry/tiptap-node/image-upload-node/image-upload-node
@@ -66,10 +58,7 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
 
   addOptions() {
     return {
-      type: "image",
-      accept: "image/*",
-      limit: 1,
-      maxSize: 0,
+      file: undefined,
       upload: undefined,
       onError: undefined,
       onSuccess: undefined,
@@ -79,14 +68,8 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
 
   addAttributes() {
     return {
-      accept: {
-        default: this.options.accept,
-      },
-      limit: {
-        default: this.options.limit,
-      },
-      maxSize: {
-        default: this.options.maxSize,
+      file: {
+        default: this.options.file,
       },
     }
   },

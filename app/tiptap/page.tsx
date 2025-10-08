@@ -1,45 +1,64 @@
 'use client'
 
-import Button from '@/components/Button';
 import Image from '@tiptap/extension-image';
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { ImageUploadNode } from './image-upload-node-extension';
+import { ChangeEvent, useCallback } from 'react';
 
 function Page() {
+  const uploadFile = useCallback(async (file: File): Promise<string> => {
+    // 여기서 실제 업로드 로직 구현
+    // 예시: 3초 후 mock URL 반환
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const mockUrl = `https://example.com/uploads/${file.name}`
+        resolve(mockUrl)
+      }, 3000)
+    })
+  }, [])
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Image,
       ImageUploadNode.configure({
-        accept: "image/*",
-        maxSize: 500 * 1024 * 1024,
-        limit: 1,
+        upload: uploadFile,
+        onSuccess: (url) => {
+          console.log('업로드 완료:', url)
+        },
+        onError: (error) => {
+          console.error('업로드 에러:', error)
+        }
       })
     ],
     content: '<p>Hello World</p>',
     immediatelyRender: false,
   })
 
-  const handleClick = () => {
-    if (!editor) {
-      return;
-    }
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
-    editor
-      .chain()
-      .focus()
-      .insertContent({
-        type: "imageUpload",
+    if (file) {
+      editor?.commands.setImageUploadNode({
+        file,
+        HTMLAttributes: {},
       })
-      .run()
-  }
+    }
+  }, [editor])
 
   return (
     <div>
-      <Button onClick={handleClick}>
+      <label htmlFor="image-upload">
         이미지 업로드
-      </Button>
+      </label>
+      <input
+        id="image-upload"
+        className="hidden"
+        type="file"
+        accept="image/*"
+        onChange={handleChange}
+      />
       <EditorContent editor={editor} />
     </div>
   )
