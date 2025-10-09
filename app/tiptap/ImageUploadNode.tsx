@@ -60,7 +60,7 @@ function ImageUploadNode(props: NodeViewProps) {
       const to = from + nodeSize;
       const filename = file.name.replace(/\.[^/.]+$/, "") || "unknown";
       const imageNode = {
-        type,
+        type: 'image',
         attrs: {
           src: url,
           alt: filename,
@@ -92,6 +92,12 @@ function ImageUploadNode(props: NodeViewProps) {
       abortControllerRef.current.abort()
     }
 
+    const isValidPos = isValidPosition(pos);
+
+    if (!isValidPos) {
+      return;
+    }
+
     // 노드 삭제
     const from = pos;
     const to = from + nodeSize;
@@ -116,27 +122,28 @@ function ImageUploadNode(props: NodeViewProps) {
   }, [file, handleUpload])
 
   return (
-    <NodeViewWrapper tabIndex={0}>
-      <div className="relative h-16 w-full overflow-hidden bg-gray-200">
-        {/* 프로그레스 바 */}
-        <div
-          className={`
-            absolute left-0 top-0 h-full w-1/5 animate-[slideProgress_2s_ease-in-out_infinite]
-            bg-blue-500/50
-          `}
-        ></div>
-        <div>
-          {file?.name}
-        </div>
-        <div>
-          {formatFileSize(file?.size ?? 0)}
-        </div>
-        <Button className="absolute right-0 top-0 size-6"
-          onClick={handleCancel}
-        >
-          닫기
-        </Button>
+    <NodeViewWrapper
+      tabIndex={0}
+      className="relative h-16 w-full overflow-hidden bg-gray-200"
+    >
+      {/* 프로그레스 바 */}
+      <div
+        className={`
+          absolute left-0 top-0 h-full w-1/5 animate-[slideProgress_2s_ease-in-out_infinite]
+          bg-blue-500/50
+        `}
+      ></div>
+      <div>
+        {file?.name}
       </div>
+      <div>
+        {formatFileSize(file?.size ?? 0)}
+      </div>
+      <Button className="absolute right-0 top-0 size-6"
+        onClick={handleCancel}
+      >
+        닫기
+      </Button>
     </NodeViewWrapper>
   );
 }
