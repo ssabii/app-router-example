@@ -34,6 +34,11 @@ function Page() {
     ],
     content: '<p>Hello World</p>',
     immediatelyRender: false,
+    editorProps: {
+      attributes: {
+        class: 'outline-none'
+      }
+    }
   })
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {

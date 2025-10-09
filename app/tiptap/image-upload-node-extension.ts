@@ -10,6 +10,11 @@ export type UploadFunction = (
 
 export interface ImageUploadNodeOptions {
   /**
+   * The type of the node.
+   * @default 'image'
+   */
+  type?: string | NodeType | undefined
+  /**
    * File to upload
    */
   file?: File
@@ -58,6 +63,7 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
 
   addOptions() {
     return {
+      type: "image",
       file: undefined,
       upload: undefined,
       onError: undefined,
