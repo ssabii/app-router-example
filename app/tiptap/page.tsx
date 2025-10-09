@@ -1,9 +1,9 @@
 'use client'
 
-import Image from '@tiptap/extension-image';
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { ImageUploadNode } from './image-upload-node-extension';
+import DeletableImageNode from './deletable-image-node-extension';
 import { ChangeEvent, useCallback } from 'react';
 
 function Page() {
@@ -15,21 +15,13 @@ function Page() {
         const mockUrl = `https://example.com/uploads/${file.name}`
         resolve(mockUrl)
       }, 3000)
-
-      // AbortSignal 처리
-      if (abortSignal) {
-        abortSignal.addEventListener('abort', () => {
-          clearTimeout(timeoutId)
-          reject(new Error('Upload cancelled'))
-        })
-      }
     })
   }, [])
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,
+      DeletableImageNode,
       ImageUploadNode.configure({
         upload: uploadFile,
         onSuccess: (url) => {
