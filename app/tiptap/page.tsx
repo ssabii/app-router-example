@@ -7,14 +7,22 @@ import { ImageUploadNode } from './image-upload-node-extension';
 import { ChangeEvent, useCallback } from 'react';
 
 function Page() {
-  const uploadFile = useCallback(async (file: File): Promise<string> => {
+  const uploadFile = useCallback(async (file: File, abortSignal?: AbortSignal): Promise<string> => {
     // 여기서 실제 업로드 로직 구현
     // 예시: 3초 후 mock URL 반환
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         const mockUrl = `https://example.com/uploads/${file.name}`
         resolve(mockUrl)
       }, 3000)
+
+      // AbortSignal 처리
+      if (abortSignal) {
+        abortSignal.addEventListener('abort', () => {
+          clearTimeout(timeoutId)
+          reject(new Error('Upload cancelled'))
+        })
+      }
     })
   }, [])
 

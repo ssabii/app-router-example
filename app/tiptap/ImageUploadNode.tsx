@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import type { NodeViewProps } from "@tiptap/react"
 import { NodeViewWrapper } from "@tiptap/react"
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { ImageUploadNodeOptions } from "./image-upload-node-extension";
 import { isValidPosition } from "@/lib/tiptap-utils";
 
@@ -12,6 +12,9 @@ function ImageUploadNode(props: NodeViewProps) {
   const pos = props.getPos()
   const editor = props.editor;
   const nodeSize = props.node.nodeSize;
+
+  // AbortController를 위한 ref
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes"
@@ -30,9 +33,18 @@ function ImageUploadNode(props: NodeViewProps) {
 
     const { type, upload, onSuccess, onError } = options as ImageUploadNodeOptions;
 
+    // 새로운 AbortController 생성
+    const abortController = new AbortController()
+    abortControllerRef.current = abortController
+
     try {
-      const url = await upload?.(file)
+      const url = await upload?.(file, abortController.signal)
       const isValidPos = isValidPosition(pos);
+
+      // 업로드가 중단되었는지 확인
+      if (abortController.signal.aborted) {
+        return;
+      }
 
       if (!url) {
         return;
@@ -63,13 +75,43 @@ function ImageUploadNode(props: NodeViewProps) {
         .run()
 
     } catch (e) {
-      onError?.(e as Error)
+      // AbortError가 아닌 경우에만 에러 처리
+      if ((e as Error).name !== 'AbortError') {
+        onError?.(e as Error)
+      }
+    } finally {
+      // 정리
+      abortControllerRef.current = null
     }
   }, [file, nodeSize, options, pos, editor])
+
+  // 업로드 취소 핸들러
+  const handleCancel = useCallback(() => {
+    // 업로드 중단
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
+    // 노드 삭제
+    const from = pos;
+    const to = from + nodeSize;
+    editor
+      .chain()
+      .focus()
+      .deleteRange({ from, to })
+      .run()
+  }, [pos, nodeSize, editor])
 
   useEffect(() => {
     if (file) {
       handleUpload();
+    }
+
+    // 컴포넌트 언마운트 시 업로드 취소
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
     }
   }, [file, handleUpload])
 
@@ -89,7 +131,9 @@ function ImageUploadNode(props: NodeViewProps) {
         <div>
           {formatFileSize(file?.size ?? 0)}
         </div>
-        <Button className="absolute right-0 top-0 size-6">
+        <Button className="absolute right-0 top-0 size-6"
+          onClick={handleCancel}
+        >
           닫기
         </Button>
       </div>
