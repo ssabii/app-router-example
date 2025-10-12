@@ -95,6 +95,25 @@ function Content({ content }: ContentProps) {
         accept="image/*"
         onChange={handleChange}
       />
+      <button onClick={() => {
+        const urls = [
+          'https://placehold.co/100x100',
+          'https://placehold.co/200x200',
+          'https://placehold.co/300x300'
+        ];
+
+        // @see: https://github.com/ueberdosis/tiptap/issues/2142
+        const images = urls.map((src) => ({
+          type: 'image',
+          attrs: { src }
+        }));
+        editor
+          ?.chain()
+          .focus()
+          .insertContent([...images, { type: 'paragraph', content: '' }])
+          .run();
+      }}
+      >이미지 여러 개 추가</button>
       <hr />
       <EditorContent editor={editor} />
     </div>
