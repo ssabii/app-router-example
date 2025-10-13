@@ -46,7 +46,7 @@
   dependencies:
     "@floating-ui/utils" "^0.2.10"
 
-"@floating-ui/dom@^1.0.0", "@floating-ui/dom@^1.7.4":
+"@floating-ui/dom@^1.0.0", "@floating-ui/dom@^1.6.13", "@floating-ui/dom@^1.7.4":
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.7.4.tgz#ee667549998745c9c3e3e84683b909c31d6c9a77"
   integrity sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==
@@ -628,10 +628,27 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-code/-/extension-code-3.6.5.tgz#b0ce6ba601ce0df9994080564c21960879c5dff4"
   integrity sha512-U/cJFjE0hqBTbMb5J74e7ni5YReuJgS9NyJgTy94+Xt6vxR1vU4+qOl+3E0fOZtwDrxbLrsCQy3P3LvNb3HXdw==
 
+"@tiptap/extension-collaboration@^3.6.6":
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-collaboration/-/extension-collaboration-3.6.6.tgz#0a31763b77dea8d089f1737139b773ec8160d9bb"
+  integrity sha512-yUyUs4DBgDRrsWTOK3wxkqSZDLLsG2tWZk6BRqSN55rkIxHPkuvuYHJt8vC+926vSYoVYOZOWFnS9Nl1YUyKvw==
+
 "@tiptap/extension-document@^3.6.5":
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-document/-/extension-document-3.6.5.tgz#5c244669751fac346a58723e1c1f21b775783f09"
   integrity sha512-0c7kxWBIEIcoHUG89vpHOF2h4CMa0q6VWXhZ+6iqcI5uyqaKwgcW/TbHZR0nAwEsZLdRCKaryn2kO7jXiCjfnA==
+
+"@tiptap/extension-drag-handle-react@^3.6.6":
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-drag-handle-react/-/extension-drag-handle-react-3.6.6.tgz#317246a715dc8fee362d0ca5b297adbd4d739b2c"
+  integrity sha512-zgb6Baorfr8/AAJiAg5RRL6acX67rxe5LnwGIZznSPTNPU7cZv8NwrRGrPDFKLlP1dYu04kkvSFSVBw7Lvao5g==
+
+"@tiptap/extension-drag-handle@^3.6.6":
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-drag-handle/-/extension-drag-handle-3.6.6.tgz#40c5657ed5fbefb74e7f0ea91499553c86a43920"
+  integrity sha512-lGOG2o/T8w8RRUQakcuHin0glmqsnL+m6IDA+Z1PRsAsJTLHkRRfgHxwQll6Cbw8o+aUvAX18vADvzMI3r4UuA==
+  dependencies:
+    "@floating-ui/dom" "^1.6.13"
 
 "@tiptap/extension-dropcursor@^3.6.5":
   version "3.6.5"
@@ -699,6 +716,11 @@
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-list/-/extension-list-3.6.5.tgz#f008d2857c173a7a3517f33c379cc892acc60d75"
   integrity sha512-2S6wNeaGvvYzJygBhHRLP0YubJAzY00WxQSO3NvHFeLFRFvilCnmh0JGMAqsNU+Owpz0iVrWY0YZskN5gPeR9w==
+
+"@tiptap/extension-node-range@^3.6.6":
+  version "3.6.6"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-node-range/-/extension-node-range-3.6.6.tgz#6b3833acc56b8c4f13c766c504deb54a30d3e1af"
+  integrity sha512-gveRXh+OClhHtR8z3iD8ioEcUtEz+OG1Z9Rm6Y61wEzxrMRTudx3Gozt6F88sTPKZhxM2XE3H00pLgU/nrW77Q==
 
 "@tiptap/extension-ordered-list@^3.6.5":
   version "3.6.5"
@@ -815,6 +837,13 @@
     "@tiptap/extension-underline" "^3.6.5"
     "@tiptap/extensions" "^3.6.5"
     "@tiptap/pm" "^3.6.5"
+
+"@tiptap/y-tiptap@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@tiptap/y-tiptap/-/y-tiptap-3.0.0.tgz#e2cf46b9346dd4666f0ecceab45bb4bccf85f1ce"
+  integrity sha512-HIeJZCj+KYJde2x6fONzo4o6kd7gW7eonwhQsv2p2VQnUgwNXMVhN+D6Z3AH/2i541Sq33y1PO4U/1ThCPjqbA==
+  dependencies:
+    lib0 "^0.2.100"
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -2418,6 +2447,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+isomorphic.js@^0.2.4:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/isomorphic.js/-/isomorphic.js-0.2.5.tgz#13eecf36f2dba53e85d355e11bf9d4208c6f7f88"
+  integrity sha512-PIeMbHqMt4DnUP3MA/Flc0HElYjMXArsw1qwJZcm9sqR8mq3l8NYizFMty0pWwE/tzIGH3EKK5+jes5mAr85yw==
+
 iterator.prototype@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/iterator.prototype/-/iterator.prototype-1.1.2.tgz#5e29c8924f01916cb9335f1ff80619dcff22b0c0"
@@ -2522,6 +2556,13 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+lib0@^0.2.100, lib0@^0.2.85, lib0@^0.2.99:
+  version "0.2.114"
+  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.114.tgz#0b0e55c3ffa8768fe3d9efca971059f465db4baf"
+  integrity sha512-gcxmNFzA4hv8UYi8j43uPlQ7CGcyMJ2KQb5kZASw6SnAKAf10hK12i2fjrS3Cl/ugZa5Ui6WwIu1/6MIXiHttQ==
+  dependencies:
+    isomorphic.js "^0.2.4"
 
 lilconfig@^2.1.0:
   version "2.1.0"
@@ -3863,10 +3904,24 @@ wrappy@1:
   resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==
 
+y-protocols@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/y-protocols/-/y-protocols-1.0.6.tgz#66dad8a95752623443e8e28c0e923682d2c0d495"
+  integrity sha512-vHRF2L6iT3rwj1jub/K5tYcTT/mEYDUppgNPXwp8fmLpui9f7Yeq3OEtTLVF012j39QnV+KEQpNqoN7CWU7Y9Q==
+  dependencies:
+    lib0 "^0.2.85"
+
 yaml@^2.3.4:
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.4.5.tgz#60630b206dd6d84df97003d33fc1ddf6296cca5e"
   integrity sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==
+
+yjs@^13.6.27:
+  version "13.6.27"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.6.27.tgz#8899be929d57da05a0aa112d044a5c204393ab7b"
+  integrity sha512-OIDwaflOaq4wC6YlPBy2L6ceKeKuF7DeTxx+jPzv1FHn9tCZ0ZwSRnUBxD05E3yed46fv/FWJbvR+Ud7x0L7zw==
+  dependencies:
+    lib0 "^0.2.99"
 
 yocto-queue@^0.1.0:
   version "0.1.0"
