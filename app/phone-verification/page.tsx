@@ -99,7 +99,7 @@ export default function Page() {
             ref={codeRef}
             id="code"
             name="code"
-            type="number"
+            type="text"
             inputMode="numeric"
             autoComplete="one-time-code"
             pattern="[0-9]{6}"
