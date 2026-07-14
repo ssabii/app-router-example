@@ -1,23 +1,48 @@
 "use client";
 
-import { KeyboardEvent, RefObject, useRef, useState } from "react";
+import { KeyboardEvent, RefObject, useEffect, useRef, useState } from "react";
 
 import Button from "@/components/Button";
 import { cn } from "@/utils/cn";
 
-type Status = "idle" | "verifying" | "success";
+type Status = "idle" | "sent" | "verifying" | "success";
 
 const inputClassName = `
-  block h-12 w-full rounded-lg border border-gray-300 bg-gray-50 px-3 text-base text-gray-900
+  block h-12 rounded-lg border border-gray-300 bg-gray-50 px-3 text-base text-gray-900
   focus:border-blue-500 focus:ring-blue-500
   dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400
   dark:focus:border-blue-500 dark:focus:ring-blue-500
 `;
 
+const statusMessage: Record<Status, string> = {
+  idle: "",
+  sent: "인증번호를 전송했습니다.",
+  verifying: "인증번호를 확인하고 있어요…",
+  success: "인증이 완료되었습니다.",
+};
+
 export default function Page() {
   const phoneRef = useRef<HTMLInputElement>(null);
   const codeRef = useRef<HTMLInputElement>(null);
+  const [codeSent, setCodeSent] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
+
+  // 인증번호 인풋이 나타나면 자동 포커스
+  useEffect(() => {
+    if (codeSent) codeRef.current?.focus();
+  }, [codeSent]);
+
+  const sendCode = () => {
+    setCodeSent(true);
+    setStatus("sent");
+    // mock: 서버로 인증번호 전송 요청
+  };
+
+  const resend = () => {
+    setStatus("sent");
+    codeRef.current?.focus();
+    // mock: 인증번호 재전송 요청
+  };
 
   // 마지막이 아닌 필드: 엔터로 다음 필드 이동 (한글 조합 중에는 이동하지 않음)
   const focusNextOnEnter = (
@@ -27,6 +52,14 @@ export default function Page() {
     if (e.key !== "Enter" || e.nativeEvent.isComposing) return;
     e.preventDefault();
     nextRef.current?.focus();
+  };
+
+  // 휴대폰 번호 필드: 엔터 → 인증번호 전송(이미 전송했다면 코드 칸으로 이동)
+  const handlePhoneKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter" || e.nativeEvent.isComposing) return;
+    e.preventDefault();
+    if (codeSent) codeRef.current?.focus();
+    else sendCode();
   };
 
   // 마지막 엔터 / 제출 버튼: native 폼 제출 → 키보드 내림 → mock 검증
@@ -48,7 +81,7 @@ export default function Page() {
               dark:text-gray-400
             `}
           >
-            엔터를 누르면 다음 칸으로 이동하고, 마지막 칸에서 엔터를 누르면
+            번호 입력 후 인증번호를 전송하고, 마지막 칸에서 엔터를 누르면
             제출됩니다.
           </p>
         </div>
@@ -66,7 +99,7 @@ export default function Page() {
             required
             placeholder="홍길동"
             onKeyDown={(e) => focusNextOnEnter(e, phoneRef)}
-            className={inputClassName}
+            className={cn(inputClassName, "w-full")}
           />
         </div>
 
@@ -83,41 +116,55 @@ export default function Page() {
             autoComplete="tel"
             pattern="[0-9]{10,11}"
             maxLength={11}
-            enterKeyHint="next"
+            enterKeyHint="send"
             required
             placeholder="01012345678"
-            onKeyDown={(e) => focusNextOnEnter(e, codeRef)}
-            className={inputClassName}
+            onKeyDown={handlePhoneKeyDown}
+            className={cn(inputClassName, "w-full")}
           />
+          {!codeSent && (
+            <Button type="button" onClick={sendCode} className="h-12 w-full">
+              인증번호 전송
+            </Button>
+          )}
         </div>
 
-        <div className="space-y-1.5">
-          <label htmlFor="code" className="block text-sm font-medium">
-            인증번호
-          </label>
-          <input
-            ref={codeRef}
-            id="code"
-            name="code"
-            type="text"
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            pattern="[0-9]{6}"
-            maxLength={6}
-            enterKeyHint="done"
-            required
-            placeholder="6자리 숫자"
-            className={inputClassName}
-          />
-        </div>
+        {codeSent && (
+          <div className="space-y-1.5">
+            <label htmlFor="code" className="block text-sm font-medium">
+              인증번호
+            </label>
+            <div className="flex gap-2">
+              <input
+                ref={codeRef}
+                id="code"
+                name="code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                enterKeyHint="done"
+                required
+                placeholder="6자리 숫자"
+                className={cn(inputClassName, "min-w-0 flex-1")}
+              />
+              <Button type="button" onClick={resend} className="h-12 shrink-0">
+                재전송
+              </Button>
+            </div>
+          </div>
+        )}
 
-        <Button
-          type="submit"
-          className="h-12 w-full"
-          disabled={status === "verifying"}
-        >
-          {status === "verifying" ? "인증 중…" : "인증 완료"}
-        </Button>
+        {codeSent && (
+          <Button
+            type="submit"
+            className="h-12 w-full"
+            disabled={status === "verifying"}
+          >
+            {status === "verifying" ? "인증 중…" : "인증 완료"}
+          </Button>
+        )}
 
         <p
           role="status"
@@ -129,15 +176,14 @@ export default function Page() {
                 text-green-600
                 dark:text-green-400
               `,
-            status === "verifying" &&
+            (status === "sent" || status === "verifying") &&
               `
                 text-gray-500
                 dark:text-gray-400
               `,
           )}
         >
-          {status === "verifying" && "인증번호를 확인하고 있어요…"}
-          {status === "success" && "인증이 완료되었습니다."}
+          {statusMessage[status]}
         </p>
       </form>
     </main>
