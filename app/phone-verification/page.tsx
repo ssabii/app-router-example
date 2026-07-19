@@ -1,17 +1,29 @@
 "use client";
 
-import { KeyboardEvent, RefObject, useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 import Button from "@/components/Button";
 import { cn } from "@/utils/cn";
 
 type Status = "idle" | "sent" | "verifying" | "success";
 
+type FormValues = {
+  name: string;
+  phone: string;
+  code: string;
+};
+
 const inputClassName = `
   block h-12 rounded-lg border border-gray-300 bg-gray-50 px-3 text-base text-gray-900
   focus:border-blue-500 focus:ring-blue-500
   dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400
   dark:focus:border-blue-500 dark:focus:ring-blue-500
+`;
+
+const errorClassName = `
+  text-sm text-red-600
+  dark:text-red-400
 `;
 
 const statusMessage: Record<Status, string> = {
@@ -22,17 +34,24 @@ const statusMessage: Record<Status, string> = {
 };
 
 export default function Page() {
-  const phoneRef = useRef<HTMLInputElement>(null);
-  const codeRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    setFocus,
+    formState: { errors },
+  } = useForm<FormValues>();
   const [codeSent, setCodeSent] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
 
   // 인증번호 인풋이 나타나면 자동 포커스
   useEffect(() => {
-    if (codeSent) codeRef.current?.focus();
-  }, [codeSent]);
+    if (codeSent) setFocus("code");
+  }, [codeSent, setFocus]);
 
-  const sendCode = () => {
+  const sendCode = async () => {
+    // 이름·번호가 유효할 때만 전송 (RHF가 인라인 에러 표시 + 포커스)
+    if (!(await trigger(["name", "phone"]))) return;
     setCodeSent(true);
     setStatus("sent");
     // mock: 서버로 인증번호 전송 요청
@@ -40,31 +59,30 @@ export default function Page() {
 
   const resend = () => {
     setStatus("sent");
-    codeRef.current?.focus();
+    setFocus("code");
     // mock: 인증번호 재전송 요청
   };
 
   // 마지막이 아닌 필드: 엔터로 다음 필드 이동 (한글 조합 중에는 이동하지 않음)
   const focusNextOnEnter = (
     e: KeyboardEvent<HTMLInputElement>,
-    nextRef: RefObject<HTMLInputElement>,
+    next: keyof FormValues,
   ) => {
     if (e.key !== "Enter" || e.nativeEvent.isComposing) return;
     e.preventDefault();
-    nextRef.current?.focus();
+    setFocus(next);
   };
 
   // 휴대폰 번호 필드: 엔터 → 인증번호 전송(이미 전송했다면 코드 칸으로 이동)
   const handlePhoneKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" || e.nativeEvent.isComposing) return;
     e.preventDefault();
-    if (codeSent) codeRef.current?.focus();
+    if (codeSent) setFocus("code");
     else sendCode();
   };
 
-  // 마지막 엔터 / 제출 버튼: native 폼 제출 → 키보드 내림 → mock 검증
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // 유효성 통과 시: 키보드 내림 → mock 검증
+  const onValid = () => {
     (document.activeElement as HTMLElement | null)?.blur();
     setStatus("verifying");
     setTimeout(() => setStatus("success"), 800);
@@ -72,7 +90,11 @@ export default function Page() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
+      <form
+        onSubmit={handleSubmit(onValid)}
+        noValidate
+        className="w-full max-w-sm space-y-5"
+      >
         <div className="space-y-1">
           <h1 className="text-xl font-bold">휴대폰 인증</h1>
           <p
@@ -91,16 +113,23 @@ export default function Page() {
             이름
           </label>
           <input
+            {...register("name", { required: "이름을 입력해 주세요." })}
             id="name"
-            name="name"
             type="text"
             autoComplete="name"
             enterKeyHint="next"
             required
             placeholder="홍길동"
-            onKeyDown={(e) => focusNextOnEnter(e, phoneRef)}
+            aria-invalid={errors.name ? "true" : "false"}
+            aria-describedby={errors.name ? "name-error" : undefined}
+            onKeyDown={(e) => focusNextOnEnter(e, "phone")}
             className={cn(inputClassName, "w-full")}
           />
+          {errors.name && (
+            <p id="name-error" role="alert" className={errorClassName}>
+              {errors.name.message}
+            </p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -108,20 +137,31 @@ export default function Page() {
             휴대폰 번호
           </label>
           <input
-            ref={phoneRef}
+            {...register("phone", {
+              required: "휴대폰 번호를 입력해 주세요.",
+              pattern: {
+                value: /^[0-9]{10,11}$/,
+                message: "휴대폰 번호 10~11자리를 숫자만 입력해 주세요.",
+              },
+            })}
             id="phone"
-            name="phone"
             type="tel"
             inputMode="numeric"
             autoComplete="tel"
-            pattern="[0-9]{10,11}"
             maxLength={11}
             enterKeyHint="send"
             required
             placeholder="01012345678"
+            aria-invalid={errors.phone ? "true" : "false"}
+            aria-describedby={errors.phone ? "phone-error" : undefined}
             onKeyDown={handlePhoneKeyDown}
             className={cn(inputClassName, "w-full")}
           />
+          {errors.phone && (
+            <p id="phone-error" role="alert" className={errorClassName}>
+              {errors.phone.message}
+            </p>
+          )}
           {!codeSent && (
             <Button type="button" onClick={sendCode} className="h-12 w-full">
               인증번호 전송
@@ -136,23 +176,34 @@ export default function Page() {
             </label>
             <div className="flex gap-2">
               <input
-                ref={codeRef}
+                {...register("code", {
+                  required: "인증번호를 입력해 주세요.",
+                  pattern: {
+                    value: /^[0-9]{6}$/,
+                    message: "인증번호 6자리를 입력해 주세요.",
+                  },
+                })}
                 id="code"
-                name="code"
                 type="text"
                 inputMode="numeric"
                 autoComplete="one-time-code"
-                pattern="[0-9]{6}"
                 maxLength={6}
                 enterKeyHint="done"
                 required
                 placeholder="6자리 숫자"
+                aria-invalid={errors.code ? "true" : "false"}
+                aria-describedby={errors.code ? "code-error" : undefined}
                 className={cn(inputClassName, "min-w-0 flex-1")}
               />
               <Button type="button" onClick={resend} className="h-12 shrink-0">
                 재전송
               </Button>
             </div>
+            {errors.code && (
+              <p id="code-error" role="alert" className={errorClassName}>
+                {errors.code.message}
+              </p>
+            )}
           </div>
         )}
 
