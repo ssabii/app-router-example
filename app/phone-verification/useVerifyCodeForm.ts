@@ -15,10 +15,6 @@ type Options = {
   onSuccess: () => void;
 };
 
-/**
- * 2단계: 인증번호 확인 폼.
- * zod 스키마로 인증번호를 검증하고, 통과하면 키보드를 내린 뒤 onSuccess로 최종 처리를 넘긴다.
- */
 export function useVerifyCodeForm({ onSuccess }: Options) {
   const {
     register,
@@ -30,7 +26,7 @@ export function useVerifyCodeForm({ onSuccess }: Options) {
   });
 
   const submit = handleSubmit(() => {
-    // 마지막 제출: 포커스 해제로 모바일 키보드를 내린다.
+    // 포커스 해제로 모바일 키보드를 내린다.
     (document.activeElement as HTMLElement | null)?.blur();
     onSuccess();
   });
