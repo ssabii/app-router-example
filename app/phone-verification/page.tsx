@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyboardEvent, useEffect, useState } from "react";
+import { KeyboardEvent, useState } from "react";
 
 import Button from "@/components/Button";
 import { cn } from "@/utils/cn";
@@ -47,12 +47,6 @@ export default function Page() {
     },
   });
 
-  // 전송이 성공해 인증번호 폼이 나타나면 자동 포커스로 흐름을 자연스럽게 잇는다.
-  const { setFocus: focusCode } = verify;
-  useEffect(() => {
-    if (codeSent) focusCode("code");
-  }, [codeSent, focusCode]);
-
   // 이름 칸에서 엔터 → 폼 제출 대신 번호 칸으로 이동 (한글 조합 중에는 이동하지 않음)
   const handleNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" || e.nativeEvent.isComposing) return;
@@ -62,7 +56,7 @@ export default function Page() {
 
   const resend = () => {
     setStatus("sent");
-    focusCode("code");
+    verify.setFocus("code");
     // mock: 인증번호 재전송 요청
   };
 
@@ -168,6 +162,8 @@ export default function Page() {
                   maxLength={6}
                   enterKeyHint="done"
                   required
+                  // 전송 성공 시점에만 마운트되므로, 마운트와 동시에 포커스가 자연스럽게 이어진다.
+                  autoFocus
                   placeholder="6자리 숫자"
                   aria-invalid={verify.errors.code ? "true" : "false"}
                   aria-describedby={verify.errors.code ? "code-error" : undefined}
