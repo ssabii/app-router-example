@@ -83,7 +83,7 @@ export default function Page() {
               이름
             </label>
             <input
-              {...send.register("name", { required: "이름을 입력해 주세요." })}
+              {...send.register("name")}
               id="name"
               type="text"
               autoComplete="name"
@@ -107,13 +107,7 @@ export default function Page() {
               휴대폰 번호
             </label>
             <input
-              {...send.register("phone", {
-                required: "휴대폰 번호를 입력해 주세요.",
-                pattern: {
-                  value: /^[0-9]{10,11}$/,
-                  message: "휴대폰 번호 10~11자리를 숫자만 입력해 주세요.",
-                },
-              })}
+              {...send.register("phone")}
               id="phone"
               type="tel"
               inputMode="numeric"
@@ -148,13 +142,7 @@ export default function Page() {
               </label>
               <div className="flex gap-2">
                 <input
-                  {...verify.register("code", {
-                    required: "인증번호를 입력해 주세요.",
-                    pattern: {
-                      value: /^[0-9]{6}$/,
-                      message: "인증번호 6자리를 입력해 주세요.",
-                    },
-                  })}
+                  {...verify.register("code")}
                   id="code"
                   type="text"
                   inputMode="numeric"
