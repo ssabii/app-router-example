@@ -31,7 +31,8 @@
     "react/jsx-max-props-per-line": [
       "warn",
       {
-        "maximum": 1
+        "maximum": 1,
+        "when": "multiline"
       }
     ],
     "react/jsx-closing-bracket-location": [
